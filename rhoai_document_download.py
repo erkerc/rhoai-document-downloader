@@ -10,9 +10,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
 # --- Configuration ---
-# We start specifically at the OpenShift AI Self-Managed 3.0 index
-START_URL = "https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.0"
-DOWNLOAD_DIR = "openshift_ai_3.0_pdfs"
+# We start specifically at the OpenShift AI Self-Managed 3.4 index
+START_URL = "https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4"
+DOWNLOAD_DIR = "openshift_ai_3.4_pdfs"
 # ---------------------
 
 def setup_driver():
@@ -53,7 +53,7 @@ def construct_pdf_url(guide_url, page_title):
 
         # 2. Parse Title
         # Title Format: "Guide Name | Product Name Version | ..."
-        # Example: "Monitoring your AI systems | Red Hat OpenShift AI Self-Managed 3.0 | ..."
+        # Example: "Monitoring your AI systems | Red Hat OpenShift AI Self-Managed 3.4 | ..."
         parts = page_title.split('|')
         if len(parts) < 2:
             return None
@@ -62,15 +62,15 @@ def construct_pdf_url(guide_url, page_title):
         product_version_raw = parts[1].strip()
 
         # 3. Split Product and Version
-        # We assume the version (3.0) is the last part of the product string
-        # "Red Hat OpenShift AI Self-Managed 3.0" -> Product="...Self-Managed", Version="3.0"
+        # We assume the version (3.4) is the last part of the product string
+        # "Red Hat OpenShift AI Self-Managed 3.4" -> Product="...Self-Managed", Version="3.4"
         pv_parts = product_version_raw.rsplit(' ', 1)
         if len(pv_parts) == 2:
             product_raw = pv_parts[0]
             version_raw = pv_parts[1]
         else:
             product_raw = product_version_raw
-            version_raw = "3.0" # Fallback
+            version_raw = "3.4" # Fallback
 
         # 4. Clean Strings
         product_clean = clean_segment(product_raw)
@@ -107,7 +107,7 @@ def main():
         links = soup.find_all('a', href=True)
         
         guide_urls = set()
-        target_path = "/documentation/red_hat_openshift_ai_self-managed/3.0/html/"
+        target_path = "/documentation/red_hat_openshift_ai_self-managed/3.4/html/"
 
         for a in links:
             href = a['href']
@@ -122,7 +122,7 @@ def main():
                 clean_url = full_url.split('#')[0]
                 guide_urls.add(clean_url)
 
-        print(f"Found {len(guide_urls)} guides matching 'OpenShift AI Self-Managed 3.0'.")
+        print(f"Found {len(guide_urls)} guides matching 'OpenShift AI Self-Managed 3.4'.")
 
         # 2. Process Guides
         for i, guide_url in enumerate(sorted(guide_urls)):
